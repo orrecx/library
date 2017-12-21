@@ -99,7 +99,7 @@ function search_books($title, $author, $td_base_style, $tr_header_style, $td_con
 }
 
 // select book_title, book_author from tb_books where book_title like $title and book_author like $author
-function search_books_2($title, $author, $td_base_style, $td_img_style, $db_user)
+function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style, $db_user)
 {
     $qr_select = '';
     $qr = '';
@@ -133,6 +133,12 @@ function search_books_2($title, $author, $td_base_style, $td_img_style, $db_user
         } else {
             $qr = $qr_select . 'WHERE book_author LIKE "%' . trim(htmlspecialchars($author)) . '%"';
         }
+    }
+    
+    if(!isset($title) && !isset($author) && $nb_res != -1)
+    {
+        //get last $nb_res books
+        $qr = 'SELECT book_id, book_title, book_author, book_description, book_img, book_onloan, book_duedate FROM tb_books ORDER BY book_id DESC LIMIT ' .$nb_res;
     }
     
     if ($qr != '') {
@@ -200,5 +206,9 @@ function search_books_2($title, $author, $td_base_style, $td_img_style, $db_user
     }
 }
 
+function search_last_20_books($td_base_style, $td_img_style, $db_user)
+{
+    search_books_2(null, null, 20, $td_base_style, $td_img_style, $db_user);
+}
 
 ?>

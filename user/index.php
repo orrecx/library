@@ -60,11 +60,12 @@
 					    isset($_POST['chl_input_author']) && $_POST['chl_input_author'] != '')
 					{
 					    //search
-					    search_books_2($_POST['chl_input_title'], $_POST['chl_input_author'], "td_srch_style", "book_description", BORROWER);
+					    search_books_2($_POST['chl_input_title'], $_POST['chl_input_author'], -1, "td_srch_style", "book_description", BORROWER);
 					}
 					else 
 					{
-					    //10 newest books
+					    //20 newest books
+					    search_last_20_books("td_srch_style", "book_description", BORROWER);
 					}
 					?>
 					</div>
