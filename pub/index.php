@@ -1,4 +1,8 @@
-	<?php include '../shelves/header.php';?>
+	<?php 
+	session_start();
+	include '../shelves/header.php';
+	
+	?>
 	
 		<div class="content">
 			<div class="usr_nav">

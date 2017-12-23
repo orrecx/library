@@ -190,7 +190,7 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
             }
             
             if ($printf_form && $n > 0)
-                printf('<td></td><td></td><input type="submit" value="book selection">');
+                printf('<tr class="%s_0" style="text-align: center; background-color: #171717; color: white;"><td></td><td colspan="2" ><input type="submit" value="Submit book selection" name="user_book_selection" style="background-color:%s_0; font-weight: bold; width: 30%%;" /></td></tr>', $td_base_style, $td_base_style);
             
             printf('</table>');
             if ($printf_form)

@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once '../services/config.php';
 include_once '../services/db_common.php';
 ?>

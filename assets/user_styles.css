@@ -10,8 +10,8 @@
 {
 	position: relative;
 	margin-top: 0px;	
-	background-color: black;
-	height: 100%;	
+	padding-right: 2px;
+	padding-left: 2px;
 }
 
 .header_t
@@ -107,18 +107,19 @@
 {
 	position: relative;
 	height: 100%;
-	width: 40%;
+	width: 60%;
 }
 
 .content_header_main_right
 {
 	position: absolute;
-	left: 40%;
+	left: 60%;
 	top: 0px;
 	height: 100%;
-	width: 60%;
-	align: right;
-	background-color: blue;
+	width: 40%;
+	text-align: right;
+	padding-top: 10px;
+	padding-right: 5px;
 }
 
 .usr_content_header_input, .usr_content_header_submit 
@@ -130,7 +131,7 @@
 	color: #6b6b6b;	
 	font-size: 18px;
 	margin-top: 8px;
-	border-radius: 15px;
+	border-radius: 10px;
 	border-color: #6b6b6b;	
 }
 
@@ -146,6 +147,7 @@
 	background-color: #e7e7e7;
 	width: 100%;
 	height: 90%;
+	box-sizing: border-box;
 }
 
 .content_main_left
@@ -153,44 +155,10 @@
 	position: relative;
 	width: 60%;
 	height: 100%;
-	background-color: green;
-}
-
-.content_main_left_top
-{
-	position: relative;	
-	width: 100%;
-	height: 70%;
-	background-color: black;	
-}
-
-.content_main_left_top_left
-{
-	position: relative;	
-	width: 70%;
-	height: 100%;
-	background-color: white;
-	box-sizing: border-box;
 	overflow-y: scroll;
-	border-size: 0px;				
 }
 
-.content_main_left_top_right
-{
-	position: absolute;
-	left: 70%;
-	top: 0px;	
-	width: 30%;
-	height: 100%;
-	background-color: red;	
-}
 
-.content_main_left_bottom
-{
-	position: relative;	
-	width: 100%;
-	height: 30%;	
-}
 
 .content_main_right
 {
@@ -207,24 +175,17 @@
 {
 	position: relative;
 	width: 100%;
-	height: 40%;
-	background-color: yellow;
+	height: 50%;
+	background-color: red;
 }
 
-.content_main_right_middle
-{
-	position: relative;
-	width: 100%;
-	height: 30%;
-	background-color: blue;
-}
 
 .content_main_right_bottom
 {
 	position: relative;
 	width: 100%;
-	height: 30%;
-	background-color: black;
+	height: 50%;
+	background-color: blue;
 }
 
 
@@ -252,6 +213,10 @@
 	font-size: 16px;
 }
 
+td
+{
+	padding: 2px;
+}
 
 
 

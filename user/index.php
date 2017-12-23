@@ -2,9 +2,16 @@
     session_start();
 
     if (! isset($_SESSION['logged_in']) || ! $_SESSION['logged_in']) {
-        // header("Location: ../pub/login.php");
+        //header("Location: ../pub/login.php");
     }
-
+    
+    if (isset($_POST['submit_logout'])) {
+        unset($_SESSION['logged_in']);
+        session_destroy();
+        header("Location: ../pub/login.php");
+        exit;
+    }
+    
     include_once '../services/user_settings.php';
     include_once '../services/db_common.php';
 
@@ -48,13 +55,16 @@
 			<input type="Submit" class="usr_content_header_submit" value="Search">
 			</form>
 			</div>
-			<div class="content_header_main_right"></div>
+			<div class="content_header_main_right">
+			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+			<input type="hidden" value="logout" name="user_logout">			
+			<input type="submit" value="Logout" name="submit_logout" class="usr_content_header_submit">
+			</form>
+			</div>
 			</div>
 			</div>
 			<div class="content_main">
-				<div class="content_main_left">
-					<div class="content_main_left_top">
-					<div class="content_main_left_top_left">
+			<div class="content_main_left">
 					<?php 
 					if((isset($_POST['chl_input_title']) && $_POST['chl_input_title'] != '')|| 
 					    isset($_POST['chl_input_author']) && $_POST['chl_input_author'] != '')
@@ -68,16 +78,11 @@
 					    search_last_20_books("td_srch_style", "book_description", BORROWER);
 					}
 					?>
-					</div>
-					<div class="content_main_left_top_right"></div>
-					</div>
-					<div class="content_main_left_bottom"></div>
-				</div>
-				<div class="content_main_right">
-					<div class="content_main_right_top"></div>
-					<div class="content_main_right_middle"></div>
-					<div class="content_main_right_bottom"></div>
-				</div>
+			</div>
+			<div class="content_main_right">
+			<div class="content_main_right_top"></div>
+			<div class="content_main_right_bottom"></div>
+			</div>
 			</div>
 		</div>
 		<div class="footer_t"></div>

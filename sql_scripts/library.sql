@@ -50,7 +50,8 @@ insert into tb_borrowers (borrower_id, borrower_name, borrower_address, borrower
 (null, 'Ndjee', 'Edea, sous le Pont', 'ndj@ndjee.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u'),
 (null, 'Salif', 'Garoua, Njamboutou', 'sal@salig.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u'),
 (null, 'Nguenang', 'Kribi, Plage', 'ngue@nguenang.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u'),
-(null, 'Ngo bell', 'Douala, Ndokoti', 'ngo.bell@bell.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u');
+(null, 'Ngo bell', 'Douala, Ndokoti', 'ngo.bell@bell.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u'),
+(null, 'test', 'Test city', 'test', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u');
 
 insert into tb_books (book_id, book_title, book_author) values
 (null, 'Harry Potter and the G Fire', 'J. K. Rowling'),
