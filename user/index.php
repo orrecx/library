@@ -8,7 +8,7 @@
     if (isset($_POST['submit_logout'])) {
         unset($_SESSION['logged_in']);
         session_destroy();
-        header("Location: ../pub/login.php");
+        header("Location: ../pub/index.php");
         exit;
     }
     
