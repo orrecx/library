@@ -196,7 +196,7 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
             if ($printf_form)
                 printf('</form>');
         } catch (PDOException $pdo_ex) {
-            error_message($pdo_ex);
+            error_message($pdo_ex->getMessage());
             exit();
         }
         
@@ -209,6 +209,72 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
 function search_last_20_books($td_base_style, $td_img_style, $db_user)
 {
     search_books_2(null, null, 20, $td_base_style, $td_img_style, $db_user);
+}
+
+function reserve_books($user_selection, $user_id, $db_user)
+{
+    $db_conn = db_getConnection($db_user);
+    
+    try 
+    {
+        foreach ($user_selection as $key => $value)
+        {
+            if(!($key == 'user_book_selection'))
+            {
+                $slct = explode('_', $key);
+                $qr = 'INSERT INTO tb_reservations (book_id, borrower_id) Values ('.$slct[2].', '.$user_id.')';
+                $db_conn->query($qr);
+            }
+        }
+    } 
+    catch (PDOException $ex) 
+    {
+        error_message($ex->getMessage());
+        exit;
+    }
+}
+
+function get_user_reserved_books($user_id, $td_base_style, $td_img_style, $db_user)
+{
+    $db_conn = db_getConnection($db_user);
+    
+    try
+    {
+        $qr = 'SELECT book_id, borrower_id from tb_reservations WHERE borrower_id = ' . $user_id;
+        $rows = $db_conn->query($qr);
+        if($rows->rowCount() > 0)
+        {
+            $books;
+            while($row = $rows->fetch(PDO::FETCH_ASSOC))
+            {
+                $books["".$row['book_id'].""] = $row['book_id'];                
+            }
+            
+            printf('<table>');
+            $i = 1;
+            foreach($books as $key => $val)
+            {
+                $rows = $db_conn->query('SELECT book_id, book_title, book_author, book_img FROM tb_books WHERE book_id = ' . $val);
+                $row = $rows->fetch(PDO::FETCH_ASSOC);
+                $tr_style = $td_base_style . '_' . ($i % 2);
+                printf('<tr class="%s"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td></tr>', 
+                            $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"]);
+                $i++;
+            }
+            
+            printf('</table>');
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    catch (PDOException $ex)
+    {
+        error_message($ex->getMessage());
+        exit;
+    }    
 }
 
 ?>
