@@ -18,7 +18,8 @@ CREATE TABLE tb_borrowers (
     borrower_email varchar(512) not null,
     borrower_password varchar(2048) not null,
     borrower_pic varchar(1024) not null default '../pics/avatar_guy.png',
-    borrower_role int unsigned not null default 0
+    borrower_role int unsigned not null default 0,
+    borrower_validation boolean not null default false
 )engine = innodb default charset=utf8;
 
 
@@ -43,7 +44,7 @@ CREATE TABLE tb_reservations (
 )engine = innodb default charset=utf8;
 
 #populate database with sample data. the default password is simply 'default'
-insert into tb_borrowers (borrower_id, borrower_name, borrower_address, borrower_email, borrower_password) values
+INSERT INTO tb_borrowers (borrower_id, borrower_name, borrower_address, borrower_email, borrower_password) VALUES
 (null, 'Atangana', 'Yaounde, olezoa', 'at@atango.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u'),
 (null, 'Madiba', 'Yaound, byiemassi', 'ma@madiba.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u'),
 (null, 'Simo', 'Doula, Cite verte', 'sim@simo.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u'),
@@ -53,7 +54,11 @@ insert into tb_borrowers (borrower_id, borrower_name, borrower_address, borrower
 (null, 'Ngo bell', 'Douala, Ndokoti', 'ngo.bell@bell.com', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u'),
 (null, 'test', 'Test city', 'test', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u');
 
-insert into tb_books (book_id, book_title, book_author) values
+INSERT INTO tb_borrowers (borrower_id, borrower_name, borrower_address, borrower_email, borrower_password, borrower_pic, borrower_role, borrower_validation) VALUES
+(null, 'admin', 'Librarian Test Address city', 'admin', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u', '../pics/admin-stempel.jpg', 3, true),
+(null, 'assistant', 'ASSISTANT Test Address', 'assistant', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u', '../pics/avatar_admin.png', 2, true);
+
+INSERT INTO tb_books (book_id, book_title, book_author) VALUES
 (null, 'Harry Potter and the G Fire', 'J. K. Rowling'),
 (null, 'Harry Potter and Half-Blood Prince', 'J. K. Rowling'),
 (null, 'Wind in the willows', 'Kenneth Grahame'),
@@ -96,7 +101,7 @@ insert into tb_books (book_id, book_title, book_author) values
 (null, 'A question of power', 'Head Bessie'),
 (null, 'Bones', 'Hove Chenjerai'),
 (null, 'Abessijnse kronieken', 'Isegawa Moses'),
-(null, 'Ingqumbo yeminyanya (Eng. versie)', 'Jordan A.C.'),
+(null, 'Ingqumbo yeminyanya (Eng. version)', 'Jordan A.C.'),
 (null, 'Die swerfjare van Poppie Nongena', 'Joubert Elsa');
 
 #change to database mysql
@@ -130,4 +135,11 @@ FLUSH PRIVILEGES;
 
 
 
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 5;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 14;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2018-12-30', borrower_id = 8 WHERE book_id = 16;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2018-01-05', borrower_id = 8 WHERE book_id = 10;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2018-02-12', borrower_id = 8 WHERE book_id = 24;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 33;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-03-03', borrower_id = 8 WHERE book_id = 27;
 
