@@ -169,7 +169,7 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
                         }
                     case BORROWER:
                         {
-                            printf('<tr class="%s"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><span style="font-weight: bold;">%s</span><br><span style="font-style: italic; font-size=12px;">%s</span></td><td>%s</td><td>', $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
+                            printf('<tr class="%s"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td><td>%s</td><td>', $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
                             if ($row['book_onloan']) {
                                 printf('<td>%s</td></tr>', $row["book_duedate"]);
                             } else {
@@ -190,7 +190,7 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
             }
             
             if ($printf_form && $n > 0)
-                printf('<td></td><td></td><input type="submit" value="book selection">');
+                printf('<tr class="%s_0" style="text-align: center; background-color: #171717; color: white;"><td></td><td colspan="2" ><input type="submit" value="Submit book selection" name="user_book_selection" style="background-color:%s_0; font-weight: bold; width: 30%%;" /></td></tr>', $td_base_style, $td_base_style);
             
             printf('</table>');
             if ($printf_form)
