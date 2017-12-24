@@ -275,6 +275,48 @@ function get_user_reserved_books($user_id, $td_base_style, $td_img_style, $db_us
         error_message($ex->getMessage());
         exit;
     }    
+    
+    return false;
+}
+
+function get_my_borrowed_books($user_id, $td_base_style, $td_img_style, $db_user)
+{
+    $db_conn = db_getConnection($db_user);
+    
+    try
+    {
+        $qr = 'SELECT book_id, book_title, book_author, book_img, borrower_id, book_onloan, book_duedate FROM tb_books WHERE borrower_id = ' . $user_id . ' AND book_onloan = true';
+        $rows = $db_conn->query($qr);
+        if($rows->rowCount() > 0)
+        {
+            $books;
+            printf('<table>');
+            $i = 1;
+            
+            while($row = $rows->fetch(PDO::FETCH_ASSOC))
+            {
+                $tr_style = $td_base_style . '_' . ($i % 2);
+                printf('<tr class="%s"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td><td>%s</td></tr>',
+                    $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_duedate"]);
+                $i++;
+            }
+            
+            printf('</table>');
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    catch (PDOException $ex)
+    {
+        error_message($ex->getMessage());
+        exit;
+    }
+    
+    return false;
+    
 }
 
 ?>

@@ -91,7 +91,7 @@
 			    reserve_books($_POST, $usr_id,  LIBRARIAN);
 			}
 			
-			echo '<div class="table_header">Reservation buckets</div>';
+			echo '<div class="table_header" style="background-color: #00b900">Reservation buckets</div>';
 			echo '<div>';
 			get_user_reserved_books($usr_id, "td_srch_style", "book_description", LIBRARIAN);
 			echo '</div>';
@@ -99,7 +99,8 @@
 			</div>
 			<div class="content_main_right_bottom">
 			<?php 
-			 echo '<div class="table_header">Books in my possession</div>';
+			 echo '<div class="table_header" style="background-color: #0000ff;">Books in my possession</div>';
+			 get_my_borrowed_books($usr_id, "td_srch_style", "book_description", LIBRARIAN);
 			?>
 			</div>
 			</div>
