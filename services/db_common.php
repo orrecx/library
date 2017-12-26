@@ -325,4 +325,68 @@ function get_my_borrowed_books($user_id, $td_base_style, $td_img_style, $db_user
     
 }
 
+
+function get_book_request($td_base_style, $nb_res, $db_user)
+{
+    $db_conn = db_getConnection($db_user);
+    
+    try
+    {
+        $qr = 'SELECT reservation_id, book_id, borrower_id FROM tb_reservations ORDER BY reservation_id DESC ' . ($nb_res > 0 ? 'LIMIT ' .$nb_res : '');
+        $rows = $db_conn->query($qr);
+        if($rows->rowCount() > 0)
+        {
+            printf('<table class="db_list">');
+            $i = 1;
+            while($row = $rows->fetch(PDO::FETCH_ASSOC))
+            {
+                $db_conn2 = db_getConnection($db_user);
+                $db_conn3 = db_getConnection($db_user);
+                
+                $qr2 = 'SELECT book_id, book_img, book_author, book_title FROM tb_books WHERE book_id =' .$row['book_id'];
+                $qr3 = 'SELECT borrower_id, borrower_name FROM tb_borrowers WHERE borrower_id =' .$row['borrower_id'];
+                
+                $rows2 = $db_conn2->query($qr2);
+                $rows3 = $db_conn3->query($qr3);
+                
+                if($rows2->rowCount() != 1 || $rows2->rowCount() != 1)
+                {
+                    return false;    
+                }
+                else 
+                {
+                    $row2 = $rows2->fetch(PDO::FETCH_ASSOC);
+                    $row3 = $rows3->fetch(PDO::FETCH_ASSOC);
+                    
+                    printf('<tr class="%s_%d";">
+                                <td style=" width:20%%; text-align: center;"><img src="%s" alt="default_img" width="60%%" height="60%%"></td>
+                                <td style="width:50%%;"><span style="font-weight: bold;">%s</span><br><span style="font-size: 14px; font-style: italic;">by %s</span></td>
+                                <td style="width=30%%; text-align: center;">%s<br><span style="font-size: 14px; font-style: italic;">[id:%s]</span></td>
+                            </tr>',
+                        $td_base_style, ($i % 2), $row2["book_img"], $row2["book_title"], $row2["book_author"], $row3["borrower_name"], $row3["borrower_id"]);
+                    $i++;                    
+                }
+            }
+            
+            printf('</table>');            
+            
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    catch (PDOException $ex)
+    {
+        error_message($ex->getMessage());
+        exit;
+    }    
+}
+
+
+function get_overdue_book($td_base_style, $nb_res, $db_user)
+{
+
+}
 ?>

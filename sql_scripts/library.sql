@@ -56,7 +56,7 @@ INSERT INTO tb_borrowers (borrower_id, borrower_name, borrower_address, borrower
 
 INSERT INTO tb_borrowers (borrower_id, borrower_name, borrower_address, borrower_email, borrower_password, borrower_pic, borrower_role, borrower_validation) VALUES
 (null, 'admin', 'Librarian Test Address city', 'admin', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u', '../pics/admin-stempel.jpg', 3, true),
-(null, 'assistant', 'ASSISTANT Test Address', 'assistant', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u', '../pics/avatar_admin.png', 2, true);
+(null, 'assistant', 'ASSISTANT Test Address', 'assistant', '$2y$10$C8w7kNdDNuEbJVF5WR5HuO5.XglOo.gMyAPWHeXLES5NZB9Y4Ei0u', '../pics/blpanther.png', 2, true);
 
 INSERT INTO tb_books (book_id, book_title, book_author) VALUES
 (null, 'Harry Potter and the G Fire', 'J. K. Rowling'),
@@ -104,6 +104,15 @@ INSERT INTO tb_books (book_id, book_title, book_author) VALUES
 (null, 'Ingqumbo yeminyanya (Eng. version)', 'Jordan A.C.'),
 (null, 'Die swerfjare van Poppie Nongena', 'Joubert Elsa');
 
+INSERT INTO tb_reservations (book_id, borrower_id) VALUES
+(10, 1),
+(30, 3),
+(23, 4),
+(24, 3),
+(2,  6),
+(20, 3);
+
+
 #change to database mysql
 USE mysql;
 DROP USER IF EXISTS 'librarian'@'localhost';
@@ -142,4 +151,3 @@ UPDATE tb_books SET book_onloan = true, book_duedate = '2018-01-05', borrower_id
 UPDATE tb_books SET book_onloan = true, book_duedate = '2018-02-12', borrower_id = 8 WHERE book_id = 24;
 UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 33;
 UPDATE tb_books SET book_onloan = true, book_duedate = '2017-03-03', borrower_id = 8 WHERE book_id = 27;
-

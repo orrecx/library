@@ -12,7 +12,7 @@ if(isset($_SESSION['is_login_data']) && $_SESSION['is_login_data'])
     
     try 
     {
-        $stmt = $db_conn->prepare("SELECT borrower_id, borrower_name, borrower_email, borrower_password from tb_borrowers WHERE borrower_email = ?");    
+        $stmt = $db_conn->prepare("SELECT borrower_id, borrower_name, borrower_email, borrower_password, borrower_role from tb_borrowers WHERE borrower_email = ?");    
         $stmt->execute(array($_SESSION['login_usrname']));
         $row = $stmt->fetch(PDO::FETCH_ASSOC); // only one element is expected
         
@@ -20,12 +20,33 @@ if(isset($_SESSION['is_login_data']) && $_SESSION['is_login_data'])
         {
             $_SESSION['user_id'] = $row['borrower_id'];
             $_SESSION['user_name'] = $row['borrower_name'];
-            $_SESSION['logged_in'] = true;            
+            $_SESSION['user_role'] = $row['borrower_role'];
 
             unset($_SESSION['login_usrname']);
             unset($_SESSION['login_usrpsswd']);
             
-            header("Location: ../user/index.php");
+            switch ($row['borrower_role'])
+            {
+                case LIBRARIAN_ROLE:
+                    {
+                        $_SESSION['admin_logged_in'] = true;                        
+                        header("Location: ../admin/index.php");
+                        break;
+                    }
+                case ASSISTANT_ROLE:
+                    {
+                        $_SESSION['assistant_logged_in'] = true;                        
+                        header("Location: ../assistant/index.php");
+                        break;
+                    }
+                default:
+                    {
+                        $_SESSION['user_logged_in'] = true;                        
+                        header("Location: ../user/index.php");
+                        break;
+                    }                    
+            }
+            
         }
         else 
         {

@@ -1,0 +1,102 @@
+<?php
+session_start();
+
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in']) {
+    unset($_SESSION['user_logged_in']);
+    session_destroy();
+    header("Location: ../pub/login.php");
+    exit;
+}
+
+if (! isset($_SESSION['assistant_logged_in']) || ! $_SESSION['assistant_logged_in']) {
+    header("Location: ../pub/login.php");
+}
+
+if (isset($_POST['assistant_submit_logout'])) {
+    unset($_SESSION['assistant_logged_in']);
+    session_destroy();
+    header("Location: ../pub/index.php");
+    exit;
+}
+
+include_once '../services/user_settings.php';
+include_once '../services/db_common.php';
+
+$usr_name = $_SESSION['user_name'];
+$usr_id = $_SESSION['user_id'];
+
+$rnd = isset($_SESSION['header_left_pic']) ? $_SESSION['header_left_pic'] : '../pics/user_header_' . rand(1, 3) . '.jpg';
+$header_left_div = '<div id="header_left" style="background-image: url('. $rnd .'); background-size: 100%; background-repeat: no-repeat; background-position: right bottom;"></div>';
+$_SESSION['header_left_pic'] = $rnd;
+
+$header_right_item_pic = '<div class="header_right_item"><img src="'.get_avatar($usr_id, LIBRARIAN).'" alt="user pic" width="100%" height="100%"></div>';
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Library at KingsRoot</title>
+<link rel="stylesheet" type="text/css" href="../assets/assistant_styles.css">
+</head>
+<body>
+	<div id="main_t">
+		<div id="header_t">
+			<?php 
+			 echo $header_left_div; 
+			?>
+			<div id="header_right">
+				<?php 
+				    echo $header_right_item_pic; 
+				?>
+				<div class="header_right_item">
+					<div class="centered">
+		    			<span class="title_font">Welcome</span><br>
+						<span class="title_font" style="color: #ff8c00;"><?php echo $usr_name;?></span>
+					</div>			
+				</div>
+				<div class="header_right_item">
+					<div id="settings">
+						<img alt="" src="../pics/settings.png" width="90%" height="90%">
+					</div>
+				</div>
+			
+			</div>
+		</div>	
+		<div id="content">
+			<div id="content_header">
+				<div id="nav_div">
+					<ul>
+						<li>Checkout</li>
+						<li>Checkin</li>
+						<li>Book catalog</li>
+					</ul>
+				</div>
+			</div>
+			<div id="content_main">
+				<div id="content_main_content"></div>
+				<div id="content_main_sidebar">
+					<div class="sidebar_item">
+						<div class="sidebar_item_title"><span>Books requests</span></div>
+						<div class="sidebar_item_content">
+						<?php 
+						  get_book_request("tr_zebra", 3, LIBRARIAN);
+						?>
+						</div>
+					</div>
+					<div class="sidebar_item">
+						<div class="sidebar_item_title"><span>Overdue Books</span></div>
+						<div class="sidebar_item_content">
+						<?php 
+						get_overdue_book("tr_zebra", 3, LIBRARIAN);
+						?>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<div id="footer_t"></div>
+	</div>
+	
+</body>
+</html> 

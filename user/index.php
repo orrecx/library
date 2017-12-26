@@ -1,12 +1,23 @@
 <?php
     session_start();
 
-    if (! isset($_SESSION['logged_in']) || ! $_SESSION['logged_in']) {
+    if (isset($_SESSION['assistant_logged_in']) && $_SESSION['assistant_logged_in']) {
+        header("Location: ../assistant/index.php");
+        exit;
+    }
+
+    if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']) {
+        header("Location: ../assistant/index.php");
+        exit;
+    }
+    
+    if (! isset($_SESSION['user_logged_in']) || ! $_SESSION['user_logged_in']) {
         header("Location: ../pub/login.php");
+        exit;
     }
     
     if (isset($_POST['submit_logout'])) {
-        unset($_SESSION['logged_in']);
+        unset($_SESSION['user_logged_in']);
         session_destroy();
         header("Location: ../pub/index.php");
         exit;

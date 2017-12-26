@@ -1,0 +1,248 @@
+@charset "UTF-8";
+
+/************************** CSS RESET *************************************/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/***************************************************************/
+
+#main_t
+{
+	font-size: 16px;
+	height:100vh;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+#header_t
+{
+	height: 10%;
+	width: 100%;
+	background-color: black;
+	color: #f8f8ff;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+#header_left
+{
+	height: 100%;
+	width: 70%;
+	float: left;
+}
+
+#header_right
+{
+	height: 100%;
+	width: 30%;
+	float: right;
+	overflow: hidden;	
+}
+
+.header_right_item
+{
+	position: relative;
+	float: left;
+	width: 33.33%;
+	height: 100%;
+	overflow: hidden;
+	box-sizing: border-box;	
+}
+
+#content
+{
+	height: 75%;
+	width: 100%;
+}
+
+#content_header
+{
+	position: relative;
+	height: 10%;
+	width: 100%;
+	box-sizing: border-box;
+	background-color: #aeaeae;	
+}
+
+#nav_div
+{
+	position: absolute;
+	padding-right: 2px;
+	padding-left: 2px;
+	box-sizing: border-box;
+	width: 100%;
+	top: 50%;
+  	transform: translateY(-50%);	
+}
+
+#content_main
+{
+	position: relative;
+	height: 90%;
+	width: 100%;
+}
+
+#content_main_content
+{
+	float: left;
+	width: 75%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+	border: 2px solid green;		
+}
+
+#content_main_sidebar
+{
+	float: right;
+	width: 25%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+	border: 2px solid green;		
+}
+
+.sidebar_item
+{
+	width: 100%;
+	height: 50%;
+	box-sizing: border-box;
+}
+
+.sidebar_item_title
+{
+	font-size: 18px;
+	background-color: #575757;
+	color: white;
+	text-align: center;
+	padding-top: 0.5%;
+	padding-bottom: 0.5%;
+}
+
+.sidebar_item_content
+{
+	
+}
+
+
+#footer_t
+{
+	height: 15%;
+	background-color: #aeaeae;
+}
+
+#settings
+{
+	background-color: #ff8c00;
+	height: 100%;
+	text-align: center;
+}
+
+.centered
+{
+	position: absolute;
+  	top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+}
+
+.title_font
+{
+	font-size: 24px;
+	font-weight: bold;
+	letter-spacing: 3px;
+}
+
+#nav_div ul 
+{
+    list-style-type: none;
+    box-sizing: border-box;
+}
+
+#nav_div ul li
+{
+	float: left;
+	color: white;
+	width: 15%;
+	overflow: hidden;
+	box-sizing: border-box;
+	font-size: 18px;
+	background-color: #575757;
+	padding: 10px 20px;
+	border-radius: 2px;	
+	text-align: center;
+	margin-right: 0.5%;
+	box-shadow: 4px -2px #8b8b8b;
+}
+
+#nav_div ul li:hover
+{
+	background-color: #d07200;
+	box-shadow: 4px 2px #733f00;
+}
+
+.tr_zebra_0{background-color: #d7d7d7;}
+.tr_zebra_1{background-color: #efefef;}
+
+.db_list td
+{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	vertical-align: middle;	
+}
+
+.db_list tr
+{
+	margin-bottom: 5px;	
+}
+
+.db_list tr:hover
+{
+	background-color: #ffca8b;
+	box-shadow: 2px 2px;
+}
+
+
+
+
