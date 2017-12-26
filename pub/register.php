@@ -117,16 +117,17 @@ include '../shelves/header.php';
 		<a href="login.php"><span class="rel_buttom">Login &#10149;</span></a>
 	</div>
 	<div class="content_main">
+	<div class="content_main_left">
 		<?php
-		$rnd = isset($_POST['img_id']) ? $_POST['img_id']: rand(1, 6);
-		    
-		echo '<div class="content_main_left" style="background-image: url(../pics/login_page_img_'.$rnd.'.jpg); background-size: 100%; background-repeat: no-repeat; background-position: right bottom;"></div>';		
-		?>		
-		<div class="content_main_right">
+		$rnd = isset($_POST['img_id']) ? $_POST['img_id']: rand(1, 6);		    
+		echo '<div class="content_main_left_in"><img src="../pics/login_page_img_'.$rnd.'.jpg" alt="picture" width="100%" height="100%"></div>';		
+		?>
+		</div>		
+		<div class="content_main_right" style="overflow: hidden;">
 					<div class="registration_form_header"><span>Fill up the form below &#9660;</span></div>
 					<div class="registration_form">
 						<form action="" method="post">
-							<table>
+							<table class="centered">
 								<tr>
 									<td>Name:</td>
 									<td><input type="text" name="registration_name" class="registration_data_input <?php echo $input_style_error_usr;?>" value="<?php echo $input_usr_val;?>"></td>

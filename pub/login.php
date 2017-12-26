@@ -46,14 +46,17 @@ include '../shelves/header.php';
 ?>
 <div class="content">
 	<div class="usr_nav">
-		<a href="index.php"><span class="rel_buttom">&#9830; Home</span></a> <a href="register.php"><span class="rel_buttom">Register &#10149;</span></a>
+		<a href="index.php"><span class="rel_buttom">&#9830; Home</span></a> 
+		<a href="register.php"><span class="rel_buttom">Register &#10149;</span></a>
 	</div>
 	<div class="content_main">
+	<div class="content_main_left">
 		<?php
 $rnd = isset($_POST['img_id']) ? $_POST['img_id'] : rand(1, 6);
-echo '<div class="content_main_left" style="background-image: url(../pics/login_page_img_' . $rnd . '.jpg); background-size: 100%; background-repeat: no-repeat; background-position: right bottom;"></div>';
+echo '<div class="content_main_left_in"><img src="../pics/login_page_img_' . $rnd . '.jpg" alt="Picture" width="100%" height="100%"></div>';
 ?>		
-		<div class="content_main_right">
+	</div>
+		<div class="content_main_right" style="overflow: hidden;">
 			<div class="login_form_header">
 					<?php
     if ($registration_succeeded) 
@@ -69,28 +72,25 @@ echo '<div class="content_main_left" style="background-image: url(../pics/login_
 
 			<div class="login_form">
 				<form action="" method="post">
-					<table>
-							<?php
-    if ($login_failed) {
-        printf('<tr><td></td><td class="input_login" style="background-color: #a7adba;"><span style="color: red;">Email or Password wrong</span></td></tr>');
-    }
-    ?>
-								<tr>
+					<table class="centered">
+						<?php
+                            if ($login_failed) {
+                                printf('<tr><td></td><td class="input_login" style="background-color: #a7adba;"><span style="color: red;">Email or Password wrong</span></td></tr>');
+                            }
+                        ?>
+						<tr>
 							<td>Email:</td>
 							<td><input type="text" name="login_usrname"
-								class="input_login <?php echo $input_style_error_usr;?>"
-								value="<?php echo $input_usr_val;?>"></td>
+								class="input_login <?php echo $input_style_error_usr;?>" value="<?php echo $input_usr_val;?>"></td>
 						</tr>
 						<tr>
 							<td>Password:</td>
 							<td><input type="password" name="login_usrpsswd"
-								class="input_login <?php echo $input_style_error_pss;?>"
-								value="<?php echo $input_pss_val;?>"></td>
+								class="input_login <?php echo $input_style_error_pss;?>" value="<?php echo $input_pss_val;?>"></td>
 						</tr>
 						<tr>
 							<td></td>
-							<td><input type="submit" name="login_data_submit" value="Login"
-								class="input_login_submit"></td>
+							<td><input type="submit" name="login_data_submit" value="Login" class="input_login_submit"></td>
 						</tr>
 					</table>
 					<input type="hidden" name="img_id" value="<?php echo $rnd;?>">

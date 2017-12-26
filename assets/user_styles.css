@@ -199,7 +199,15 @@
 .td_srch_style_0, .td_srch_style_1
 {
 	padding-top: 5px;	
+	border: 2px solid black;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+	overflow: hidden; 
+	#box-shadow: 3px 3px #c0c0c0;
+	border-radius: 1px;
+	
 }
+
 
 .td_srch_style_0 { background-color: #d7d7d7;}
 .td_srch_style_1 { background-color: #efefef;}
@@ -207,7 +215,7 @@
 .book_description
 {
 	position: relative;
-	width: 10%;
+	width: 15%;
 	height: auto;
 	box-sizing: border-box;
 	font-size: 16px;
@@ -215,7 +223,12 @@
 
 td
 {
-	padding: 2px;
+	padding: 1px;
+}
+
+tr:hover 
+{
+	background-color: #fff4b9;
 }
 
 .table_header
@@ -228,7 +241,11 @@ td
 	color: white;
 	height: 32px;
 	text-align: center;
-	padding-top: 5px;	
+	padding-top: 5px;
+	overflow: hidden;
+	box-sizing: border-box;	
+	z-index: 1;
+	border-radius: 3px;
 }
 
 

@@ -16,7 +16,7 @@
 					</div>
 					<div class="book_search">
 						<form action="" method="post">
-							<table>
+							<table class="centered">
 								<tr>
 									<td>Title:</td>
 									<td><input type="text" name="book_title" class="input_search"></td>
@@ -41,13 +41,13 @@
         printf('<div class="content_main_right_content_header"><span>Search Result</span></div>');
         printf('<div class="content_main_right_content">');
         
-        search_books($_POST['book_title'], $_POST['book_author'], "td_out", "tr_out", "book_description", PUBL);
+        search_books_2($_POST['book_title'], $_POST['book_author'], -1, "td_out", "book_description", PUBL);
     } else {
         printf('<div class="content_main_right_content_header"><span>Recommanded Books</span></div>');
         printf('<div class="content_main_right_content">');
         
         // deliver recommanded book
-        books_of_the_day("td_out", "tr_out", "book_description", PUBL);
+        books_of_the_day("td_out", "book_description", PUBL);
     }
     printf('</div>');
     

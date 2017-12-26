@@ -14,25 +14,6 @@ function number_books()
     }
 }
 
-function books_of_the_day($td_style, $tr_header_stlye, $td_content_style, $db_user)
-{
-    $nb_bks = number_books();
-    if ($nb_bks > 1) {
-        $half = round($nb_bks / 2);
-        $bid_1 = rand(1, $half);
-        $bid_2 = rand($half + 1, $nb_bks);
-        $db_conn = db_getConnection($db_user);
-        $sth = $db_conn->query('SELECT book_title, book_author, book_description FROM tb_books WHERE book_id = ' . $bid_1 . ' OR book_id = ' . $bid_2);
-        printf('<table><tr class="%s"><th>Title</th><th>Author</th><th>Description</th></tr>', $tr_header_stlye);
-        $i = 1;
-        while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
-            printf('<tr class="%s_%d"><td><div class="%s">%s</div></td><td><div class="%s">%s</div></td><td><div class="%s">%s</div></td></tr>', $td_style, ($i % 2), $td_content_style, $row['book_title'], $td_content_style, $row['book_author'], $td_content_style, $row['book_description']);
-            $i ++;
-        }
-        
-        printf('</table>');
-    }
-}
 
 // select book_title, book_author from tb_books where book_title like $title and book_author like $author
 function search_books($title, $author, $td_base_style, $tr_header_style, $td_content_style, $db_user)
@@ -95,6 +76,29 @@ function search_books($title, $author, $td_base_style, $tr_header_style, $td_con
         return SUCCEEDED;
     } else {
         return FAILED;
+    }
+}
+
+function books_of_the_day($tr_base_style, $td_img_style, $db_user)
+{
+    $nb_bks = number_books();
+    if ($nb_bks > 1) {
+        $half = round($nb_bks / 2);
+        $bid_1 = rand(1, $half);
+        $bid_2 = rand($half + 1, $nb_bks);
+        $db_conn = db_getConnection($db_user);
+        $sth = $db_conn->query('SELECT book_title, book_author, book_description, book_img FROM tb_books WHERE book_id = ' . $bid_1 . ' OR book_id = ' . $bid_2);
+        printf('<table>');
+        $i = 1;
+        while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
+            
+            printf('<tr class="%s_%d"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td><td>%s</td><td>',
+                $tr_base_style, ($i % 2), $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
+            
+            $i ++;
+        }
+        
+        printf('</table>');
     }
 }
 
@@ -169,7 +173,8 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
                         }
                     case BORROWER:
                         {
-                            printf('<tr class="%s"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td><td>%s</td><td>', $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
+                            printf('<tr class="%s"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td><td>%s</td><td>', 
+                                $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
                             if ($row['book_onloan']) {
                                 printf('<td>%s</td></tr>', $row["book_duedate"]);
                             } else {
@@ -181,7 +186,8 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
                         }
                     default:
                         {
-                            printf('<tr class="%s"><td class="%s">%s</td><td>%s:<br>%s</td><td>%s</td></tr>', $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
+                            printf('<tr class="%s"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td><td>%s</td><td>',
+                                $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
                             break;
                         }
                 }
