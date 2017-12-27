@@ -87,7 +87,7 @@ $header_right_item_pic = '<div class="header_right_item"><img src="'.get_avatar(
 						<div class="sidebar_item_title"><span>Overdue Books</span></div>
 						<div class="sidebar_item_content">
 						<?php 
-						get_overdue_book("tr_zebra", 3, LIBRARIAN);
+						get_overdue_books("tr_zebra", 3, LIBRARIAN);
 						?>
 						</div>
 					</div>

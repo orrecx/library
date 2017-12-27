@@ -151,3 +151,6 @@ UPDATE tb_books SET book_onloan = true, book_duedate = '2018-01-05', borrower_id
 UPDATE tb_books SET book_onloan = true, book_duedate = '2018-02-12', borrower_id = 8 WHERE book_id = 24;
 UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 33;
 UPDATE tb_books SET book_onloan = true, book_duedate = '2017-03-03', borrower_id = 8 WHERE book_id = 27;
+
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-20', borrower_id = 6 WHERE book_id = 30;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-15', borrower_id = 6 WHERE book_id = 21;

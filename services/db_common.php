@@ -385,8 +385,54 @@ function get_book_request($td_base_style, $nb_res, $db_user)
 }
 
 
-function get_overdue_book($td_base_style, $nb_res, $db_user)
+function get_overdue_books($td_base_style, $nb_res, $db_user)
 {
-
+    $db_conn = db_getConnection($db_user);
+    
+    try
+    {
+        $qr = 'SELECT book_id, book_title, book_author, book_img, book_onloan, book_duedate, borrower_id FROM tb_books WHERE book_onloan = true ORDER BY book_duedate ASC ' . ($nb_res > 0 ? 'LIMIT ' .$nb_res : '');
+        $rows = $db_conn->query($qr);
+        if($rows->rowCount() > 0)
+        {
+            printf('<table class="db_list">');
+            $i = 1;
+            while($row = $rows->fetch(PDO::FETCH_ASSOC))
+            {
+                if($row['book_onloan'])
+                {
+                    $datetime = new DateTime($row['book_duedate']);
+                    if(time() > $datetime->getTimestamp())
+                    {
+                        $db_conn3 = db_getConnection($db_user);                
+                        $qr3 = 'SELECT borrower_id, borrower_name FROM tb_borrowers WHERE borrower_id =' .$row['borrower_id'];                
+                        $rows3 = $db_conn3->query($qr3);
+                        $row3 = $rows3->fetch(PDO::FETCH_ASSOC);
+                    
+                        printf('<tr class="%s_%d";">
+                                    <td style=" width:20%%; text-align: center;"><img src="%s" alt="default_img" width="60%%" height="60%%"></td>
+                                    <td style="width:50%%;"><span style="font-weight: bold;">%s</span><br><span style="font-size: 14px; font-style: italic;">by %s</span></td>
+                                    <td style="width=30%%; text-align: center;">%s<br><span style="font-size: 14px; font-style: italic;">by [%s]</span></td>
+                                </tr>',
+                            $td_base_style, ($i % 2), $row["book_img"], $row["book_title"], $row["book_author"], $row["book_duedate"], $row3["borrower_id"]);
+                        $i++;
+                    }
+                }
+            }
+            
+            printf('</table>');
+            
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    catch (PDOException $ex)
+    {
+        error_message($ex->getMessage());
+        exit;
+    }
 }
 ?>
