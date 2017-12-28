@@ -96,12 +96,19 @@ $(document).ready(function(){
 		</div>	
 		<div id="content">
 			<div id="content_header">
-				<div id="nav_div">
-					<ul>
-						<li id="checkout">Checkout</li>
-						<li id="checkin">Checkin</li>
-						<li id="book_catalog">Book catalog</li>
-					</ul>
+				<div id="content_header_nav">
+					<div id="nav_div">
+						<ul>
+							<li id="checkout">Checkout</li>
+							<li id="checkin">Checkin</li>
+							<li id="book_catalog">Book catalog</li>
+						</ul>
+					</div>
+				</div>
+				<div id="content_header_search">
+					<div id="search_div">
+						<input type="search" placeholder="Search..." name="assistant_search" id="assistant_input_search">
+					</div>
 				</div>
 			</div>
 			<div id="content_main">
