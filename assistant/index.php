@@ -12,7 +12,7 @@ if (! isset($_SESSION['assistant_logged_in']) || ! $_SESSION['assistant_logged_i
     header("Location: ../pub/login.php");
 }
 
-if (isset($_POST['assistant_submit_logout'])) {
+if (isset($_GET['assistant_logout'])) {
     unset($_SESSION['assistant_logged_in']);
     session_destroy();
     header("Location: ../pub/index.php");
@@ -66,6 +66,7 @@ $(document).ready(function(){
 	<div id="main_t">
 		<div id="header_t">
 			<?php 
+			//header left
 			 echo $header_left_div; 
 			?>
 			<div id="header_right">
@@ -79,11 +80,18 @@ $(document).ready(function(){
 					</div>			
 				</div>
 				<div class="header_right_item">
-					<div id="settings">
-						<img alt="" src="../pics/settings.png" width="90%" height="90%">
+					<div id="user_tools">
+						<div id="settings">
+							<img alt="" src="../pics/settings.png" width="100%" height="100%">
+						</div>
+						<div id="header_nav">
+							<ul>
+								<li>Settings</li>
+								<li><a href="index.php?assistant_logout=true">Logout</a></li>
+							</ul>
+						</div>
 					</div>
-				</div>
-			
+				</div>			
 			</div>
 		</div>	
 		<div id="content">
