@@ -110,9 +110,13 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
     
     switch ($db_user) {
         case LIBRARIAN:
-        case ASSISTANT:
             {
                 $qr_select = 'SELECT * FROM tb_books ';
+                break;
+            }
+        case ASSISTANT:
+            {
+                $qr = 'SELECT * FROM tb_books ';
                 break;
             }
         case BORROWER:
@@ -127,7 +131,7 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
             }
     }
     
-    if (isset($title) && $title != '') {
+    if (isset($title) && $title != '' && $nb_res != -1) {
         $qr = $qr_select . 'WHERE book_title LIKE "%' . trim(htmlspecialchars($title)) . '%"';
     }
     
@@ -141,8 +145,8 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
     
     if(!isset($title) && !isset($author) && $nb_res != -1)
     {
-        //get last $nb_res books
-        $qr = 'SELECT book_id, book_title, book_author, book_description, book_img, book_onloan, book_duedate FROM tb_books ORDER BY book_id DESC LIMIT ' .$nb_res;
+        //get last $nb_res books: nb_res != -1
+        $qr = 'SELECT book_id, book_title, book_author, book_description, book_img, book_onloan, book_duedate FROM tb_books ORDER BY book_id DESC LIMIT ' . $nb_res;
     }
     
     if ($qr != '') {
@@ -154,12 +158,14 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
             $n = 0;
             $printf_form = $sth->rowCount() > 0 && $db_user == BORROWER ? true : false;
             
-            if ($printf_form)
-                printf('<form method="post" action="">');
-            printf('<table>');
+            if ($printf_form) printf('<form method="post" action="">');
+            
+            printf('<table class="db_list">');
             
             while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
+                
                 $tr_style = $td_base_style . "_" . ($i % 2);
+                
                 switch ($db_user) {
                     case LIBRARIAN:
                         {
@@ -168,7 +174,34 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
                         }
                     case ASSISTANT:
                         {
-                            printf('<tr class="%s"><td class="%s">%s</td><td>%s:<br>%s</td><td>%s</td></tr>', $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
+                            $tr_style = 'class="' . $tr_style . '" '; 
+                            $tr_trail = '';
+                            if($row['book_onloan'])
+                            {
+                                $tr_trail = '<td style="text-align: center;">'.$row['book_duedate'].'<br><span style="font-style: italic; font-size: 14px;">- '.$row['borrower_id'].' -</span></td>';
+                                $datetime = new DateTime($row['book_duedate']);
+                                if(time() > $datetime->getTimestamp())
+                                {
+                                    $tr_style = $tr_style . ' style="background-color: #ffa2a2;" ';
+                                }
+                                else 
+                                {
+                                    $tr_style = $tr_style . ' style="background-color: #b9ffb9;" ';
+                                }
+                            }
+                            else 
+                            {
+                                $tr_trail = '<td></td>';
+                            }
+                            
+                            printf('<tr %s>
+                                    <td style="text-align: center; width:10%%;">[%s]</td>
+                                    <td style="text-align: center; width:10%%;"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:60%%; height:10%%;"></td>
+                                    <td style="width: 30%%;"><span style="font-weight: bold;">%s</span><br><span style="font-style: italic; font-size: 14px;">by %s</span></td>
+                                    <td style="width: 40%%;">%s</td>
+                                    %s</tr>',
+                                $tr_style, $row["book_id"], $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"], $tr_trail) ;                            
+                            
                             break;
                         }
                     case BORROWER:

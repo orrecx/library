@@ -130,7 +130,12 @@ table {
 	height: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
-	border: 2px solid green;		
+	border: 3px solid #ff8c00;		
+}
+
+#content_main_db_result
+{
+	width: 100%;
 }
 
 #content_main_sidebar
@@ -140,7 +145,7 @@ table {
 	height: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
-	border: 2px solid green;		
+	/*border: 2px solid green;*/		
 }
 
 .sidebar_item
@@ -214,6 +219,7 @@ table {
 	text-align: center;
 	margin-right: 0.5%;
 	box-shadow: 4px -2px #8b8b8b;
+	cursor: pointer;
 }
 
 #nav_div ul li:hover
@@ -225,6 +231,11 @@ table {
 .tr_zebra_0{background-color: #d7d7d7;}
 .tr_zebra_1{background-color: #efefef;}
 
+.db_list
+{
+	width: 100%;	
+}
+
 .db_list td
 {
 	padding-top: 5px;
@@ -234,7 +245,8 @@ table {
 
 .db_list tr
 {
-	margin-bottom: 5px;	
+	margin-bottom: 5px;
+	width: 100%;	
 }
 
 .db_list tr:hover

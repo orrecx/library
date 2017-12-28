@@ -29,7 +29,7 @@ $rnd = isset($_SESSION['header_left_pic']) ? $_SESSION['header_left_pic'] : '../
 $header_left_div = '<div id="header_left" style="background-image: url('. $rnd .'); background-size: 100%; background-repeat: no-repeat; background-position: right bottom;"></div>';
 $_SESSION['header_left_pic'] = $rnd;
 
-$header_right_item_pic = '<div class="header_right_item"><img src="'.get_avatar($usr_id, LIBRARIAN).'" alt="user pic" width="100%" height="100%"></div>';
+$header_right_item_pic = '<div class="header_right_item"><img src="'.get_avatar($usr_id, ASSISTANT).'" alt="user pic" width="100%" height="100%"></div>';
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +37,30 @@ $header_right_item_pic = '<div class="header_right_item"><img src="'.get_avatar(
 <head>
 <title>Library at KingsRoot</title>
 <link rel="stylesheet" type="text/css" href="../assets/assistant_styles.css">
+<script src="../assets/jquery-3.2.1.js"></script>
+<script>
+$(document).ready(function(){
+
+	$('#book_catalog').click(function()
+		{
+			$.ajax({
+				type: "POST",
+				data: 'assistant_req=req_book_catalog',
+				url: "ajax.php", success: function(result)
+					{
+						$('#dfer45').remove();
+						$("#content_main_db_result").css({"height":"100%", "overflow":"scroll"});
+						$("#content_main_db_result").html(result);							        								
+	    			}
+	    		}
+    		);
+
+			$("#content_main_content").append('<h1 id="dfer45">Loading...</h1>');			
+		}
+	);
+	
+});
+</script>
 </head>
 <body>
 	<div id="main_t">
@@ -66,20 +90,22 @@ $header_right_item_pic = '<div class="header_right_item"><img src="'.get_avatar(
 			<div id="content_header">
 				<div id="nav_div">
 					<ul>
-						<li>Checkout</li>
-						<li>Checkin</li>
-						<li>Book catalog</li>
+						<li id="checkout">Checkout</li>
+						<li id="checkin">Checkin</li>
+						<li id="book_catalog">Book catalog</li>
 					</ul>
 				</div>
 			</div>
 			<div id="content_main">
-				<div id="content_main_content"></div>
+				<div id="content_main_content">
+				<div id="content_main_db_result"></div>
+				</div>
 				<div id="content_main_sidebar">
 					<div class="sidebar_item">
 						<div class="sidebar_item_title"><span>Books requests</span></div>
 						<div class="sidebar_item_content">
 						<?php 
-						  get_book_request("tr_zebra", 3, LIBRARIAN);
+						  get_book_request("tr_zebra", 3, ASSISTANT);
 						?>
 						</div>
 					</div>
@@ -87,7 +113,7 @@ $header_right_item_pic = '<div class="header_right_item"><img src="'.get_avatar(
 						<div class="sidebar_item_title"><span>Overdue Books</span></div>
 						<div class="sidebar_item_content">
 						<?php 
-						get_overdue_books("tr_zebra", 3, LIBRARIAN);
+						get_overdue_books("tr_zebra", 3, ASSISTANT);
 						?>
 						</div>
 					</div>

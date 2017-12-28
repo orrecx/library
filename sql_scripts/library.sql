@@ -125,9 +125,9 @@ USE library;
 
 #create user accounts
 CREATE USER 'librarian'@'localhost' IDENTIFIED  BY 'librarian_psswd';
-GRANT select, update, insert, delete on library.* to 'librarian'@'localhost';
+GRANT select, update, insert, delete ON library.* to 'librarian'@'localhost';
 
-CREATE USER 'assistant'@'localhost' IDENTIFIED  BY 'assitant_psswd';
+CREATE USER 'assistant'@'localhost' IDENTIFIED  BY 'assistant_psswd';
 GRANT SELECT ON library.* to 'assistant'@'localhost';
 GRANT UPDATE (book_onloan, book_duedate, borrower_id) ON library.tb_books to 'assistant'@'localhost';
 
@@ -150,7 +150,8 @@ UPDATE tb_books SET book_onloan = true, book_duedate = '2018-12-30', borrower_id
 UPDATE tb_books SET book_onloan = true, book_duedate = '2018-01-05', borrower_id = 8 WHERE book_id = 10;
 UPDATE tb_books SET book_onloan = true, book_duedate = '2018-02-12', borrower_id = 8 WHERE book_id = 24;
 UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 33;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2017-03-03', borrower_id = 8 WHERE book_id = 27;
 
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-03-03', borrower_id = 8 WHERE book_id = 27;
 UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-20', borrower_id = 6 WHERE book_id = 30;
 UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-15', borrower_id = 6 WHERE book_id = 21;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-19', borrower_id = 5 WHERE book_id = 2;
