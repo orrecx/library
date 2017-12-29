@@ -32,13 +32,34 @@ CREATE TABLE tb_books (
     book_onloan boolean default false,
     book_duedate date default null,
     borrower_id int unsigned default null, 
-    foreign key (borrower_id) references tb_borrowers (borrower_id)
+    FOREIGN KEY (borrower_id) REFERENCES tb_borrowers (borrower_id)
 )engine = innodb default charset=utf8;
 
 CREATE TABLE tb_reservations (
 	reservation_id int unsigned not null primary key auto_increment,
 	book_id int unsigned not null,
 	borrower_id int unsigned not null,
+	FOREIGN KEY (book_id) REFERENCES tb_books (book_id),
+	FOREIGN KEY (borrower_id) REFERENCES tb_borrowers (borrower_id)
+)engine = innodb default charset=utf8;
+
+CREATE TABLE tb_book_tracker(
+    tracker_id int unsigned not null primary key auto_increment,
+    book_id int unsigned not null,
+    borrower_id int unsigned not null,
+    start_date date not null,
+    end_date date not null,
+	FOREIGN KEY (book_id) REFERENCES tb_books (book_id),
+	FOREIGN KEY (borrower_id) REFERENCES tb_borrowers (borrower_id)
+)engine = innodb default charset=utf8;
+
+
+CREATE TABLE tb_book_tracker_archives(
+    tracker_archives_id int unsigned not null primary key auto_increment,
+    book_id int unsigned not null,
+    borrower_id int unsigned not null,
+    start_date date not null,
+    end_date date not null,
 	FOREIGN KEY (book_id) references tb_books (book_id),
 	FOREIGN KEY (borrower_id) references tb_borrowers (borrower_id)
 )engine = innodb default charset=utf8;
@@ -105,12 +126,51 @@ INSERT INTO tb_books (book_id, book_title, book_author) VALUES
 (null, 'Die swerfjare van Poppie Nongena', 'Joubert Elsa');
 
 INSERT INTO tb_reservations (book_id, borrower_id) VALUES
-(10, 1),
-(30, 3),
+(11, 1),
+(32, 1),
 (23, 4),
-(24, 3),
-(2,  6),
-(20, 3);
+(25, 4),
+(2,  4),
+(17, 3),
+(26, 3),
+(8,  6),
+(12, 5),
+(22, 5),
+(39, 5),
+(41, 5);
+
+
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 5;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 14;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2018-01-30', borrower_id = 8 WHERE book_id = 16;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2018-01-05', borrower_id = 2 WHERE book_id = 10;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2018-02-12', borrower_id = 2 WHERE book_id = 24;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 2 WHERE book_id = 33;
+
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-09-03', borrower_id = 6 WHERE book_id = 27;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-20', borrower_id = 6 WHERE book_id = 30;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-15', borrower_id = 1 WHERE book_id = 21;
+UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-19', borrower_id = 5 WHERE book_id = 2;
+
+INSERT INTO tb_book_tracker (book_id, borrower_id, start_date, end_date) VALUES
+(5,  8, '2017-09-30', '2017-12-30'),
+(14, 8, '2017-09-30', '2017-12-30'),
+(16, 8, '2017-09-30', '2018-01-30'),
+(10, 2, '2017-10-05', '2018-01-05'),
+(24, 2, '2017-10-12', '2018-02-12'),
+(33, 2, '2017-09-30', '2017-12-30'),
+(27, 6, '2017-06-03', '2017-09-03'),
+(30, 6, '2017-09-20', '2017-12-20'),
+(21, 1, '2017-09-15', '2017-12-15'),
+(2,  5, '2017-09-19', '2017-12-19');
+
+INSERT INTO tb_book_tracker_archives (book_id, borrower_id, start_date, end_date) VALUES
+(24, 2, '2017-07-13', '2018-08-12'),
+(33, 2, '2017-07-09', '2017-10-30'),
+(27, 6, '2017-08-05', '2017-10-03'),
+(30, 6, '2017-08-12', '2017-11-26'),
+(21, 1, '2017-09-15', '2017-11-10'),
+(2,  5, '2017-10-29', '2017-12-03');
 
 
 #change to database mysql
@@ -141,17 +201,3 @@ FLUSH PRIVILEGES;
 
 #revoke delete, update on library.* from 'librarian'@'host'; #for host '%' means any host
 #GRANT ALL PRIVILEGES ON *.* to 'newuser'@'localhost';
-
-
-
-UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 5;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 14;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2018-12-30', borrower_id = 8 WHERE book_id = 16;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2018-01-05', borrower_id = 8 WHERE book_id = 10;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2018-02-12', borrower_id = 8 WHERE book_id = 24;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-30', borrower_id = 8 WHERE book_id = 33;
-
-UPDATE tb_books SET book_onloan = true, book_duedate = '2017-03-03', borrower_id = 8 WHERE book_id = 27;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-20', borrower_id = 6 WHERE book_id = 30;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-15', borrower_id = 6 WHERE book_id = 21;
-UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-19', borrower_id = 5 WHERE book_id = 2;
