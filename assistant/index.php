@@ -58,6 +58,28 @@ $(document).ready(function(){
 			$("#content_main_content").append('<h1 id="dfer45">Loading...</h1>');			
 		}
 	);
+
+	$('#assistant_input_search').keydown(function(event)
+		{
+			//if not ENTER
+			if(event.keyCode != 13 || ($(this).val()).trim() == '')
+			{
+				return;
+			}
+			
+			$.ajax({
+				type: "POST",
+				data: 'assistant_req=req_book_search&book_query=' + $(this).val(),
+				url: "ajax.php", success: function(result)
+					{
+						$('#dfer45').remove();
+						$("#content_main_db_result").css({"height":"100%", "overflow":"scroll"});
+						$("#content_main_db_result").html(result);							        								
+	    			}
+	    		}
+    		);				
+		}			
+	);
 	
 });
 </script>

@@ -103,7 +103,7 @@ function books_of_the_day($tr_base_style, $td_img_style, $db_user)
 }
 
 // select book_title, book_author from tb_books where book_title like $title and book_author like $author
-function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style, $db_user)
+function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style, $db_user, $inclusiv = false)
 {
     $qr_select = '';
     $qr = '';
@@ -116,7 +116,14 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
             }
         case ASSISTANT:
             {
-                $qr = 'SELECT * FROM tb_books ';
+                if(isset($title) || isset($author))
+                {
+                    $qr_select = 'SELECT * FROM tb_books ';
+                }
+                else 
+                {
+                    $qr = 'SELECT * FROM tb_books ';
+                }
                 break;
             }
         case BORROWER:
@@ -137,7 +144,7 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
     
     if (isset($author) && $author != '') {
         if ($qr != '') {
-            $qr = $qr . ' AND book_author LIKE "%' . trim(htmlspecialchars($author)) . '%"';
+            $qr = $qr . ($inclusiv ? ' OR ' : ' AND ') . ' book_author LIKE "%' . trim(htmlspecialchars($author)) . '%"';
         } else {
             $qr = $qr_select . 'WHERE book_author LIKE "%' . trim(htmlspecialchars($author)) . '%"';
         }

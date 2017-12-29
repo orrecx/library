@@ -32,6 +32,15 @@ switch ($_POST['assistant_req'])
         {
             
         }
+    case "req_book_search":
+        {
+            //print_r($_POST);
+            if(isset($_POST['book_query']))
+            {
+                search_books_2($_POST['book_query'], $_POST['book_query'], -2, "tr_zebra", null, ASSISTANT, true);
+            }
+            break;
+        }
     default:
         {
             echo "<h1>Assistant Request [".$_POST['assistant_req']."] not supported yet</h1>";
