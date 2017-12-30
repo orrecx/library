@@ -39,6 +39,52 @@ $header_right_item_pic = '<div class="header_right_item"><img src="'.get_avatar(
 <link rel="stylesheet" type="text/css" href="../assets/assistant_styles.css">
 <script src="../assets/jquery-3.2.1.js"></script>
 <script>
+
+function nav_mark_selected_item(elt)
+{
+	$('#nav_div ul li').css("background-color", "#575757");
+	$(elt).css("background-color", "#d07200");
+	if(elt == '#checkin' || elt == '#checkout')
+	{
+		$("#content_main_db_result").css({"height":"90%", "overflow-y":"scroll"});
+		$("#content_main_content").append
+		(
+			'<div id="context_filter" style="height: 10%; background-color: #575757; text-align: center; ">'
+			+'<input type="text" id="ct_filter_input" placeholder="filter id/email" style="background-color: white; width: 20%; padding: 1%; font-size: 16px; text-align: center; margin-top: 0.5%;">'
+			+'</div>'
+		);
+
+		$('#ct_filter_input').keydown(function(event)
+				{
+					//if not ENTER
+					if(event.keyCode != 13 || ($(this).val()).trim() == '')
+					{
+						return;
+					}
+
+					var src_val = ($(this).val()).trim();
+					var dt = 'assistant_req=' + ((elt == '#checkin') ? 'req_book_checkin': 'req_book_checkout') + '&query=' + $(this).val() 
+					$.ajax({
+						type: "POST",
+						data: dt,
+						url: "ajax.php", success: function(result)
+							{
+								$("#content_main_db_result").css({"height":"100%", "overflow-y":"scroll"});
+								$("#content_main_db_result").html(result);
+			    			}
+			    		}
+		    		);				
+				}			
+			);
+				
+	}
+	else
+	{
+		$('#context_filter').remove();		
+		$("#content_main_db_result").css({"height":"100%", "overflow-y":"scroll"});
+	}	
+}
+
 $(document).ready(function(){
 
 	$('#book_catalog').click(function()
@@ -49,16 +95,52 @@ $(document).ready(function(){
 				url: "ajax.php", success: function(result)
 					{
 						$('#dfer45').remove();
-						$("#content_main_db_result").css({"height":"100%", "overflow":"scroll"});
 						$("#content_main_db_result").html(result);							        								
 	    			}
 	    		}
     		);
 
+			nav_mark_selected_item('#book_catalog');
 			$("#content_main_content").append('<h1 id="dfer45">Loading...</h1>');			
 		}
 	);
 
+	$('#checkin').click(function()
+			{
+				$.ajax({
+					type: "POST",
+					data: 'assistant_req=req_book_checkin',
+					url: "ajax.php", success: function(result)
+						{
+							$('#dfer45').remove();
+							$("#content_main_db_result").html(result);							        								
+		    			}
+		    		}
+	    		);
+
+				nav_mark_selected_item('#checkin');
+				$("#content_main_content").append('<h1 id="dfer45">Loading...</h1>');			
+			}
+		);
+
+	$('#checkout').click(function()
+			{
+				$.ajax({
+					type: "POST",
+					data: 'assistant_req=req_book_checkout',
+					url: "ajax.php", success: function(result)
+						{
+							$('#dfer45').remove();
+							$("#content_main_db_result").html(result);							        								
+		    			}
+		    		}
+	    		);
+
+				nav_mark_selected_item('#checkout');
+				$("#content_main_content").append('<h1 id="dfer45">Loading...</h1>');			
+			}
+		);
+	
 	$('#assistant_input_search').keydown(function(event)
 		{
 			//if not ENTER
@@ -66,15 +148,18 @@ $(document).ready(function(){
 			{
 				return;
 			}
-			
+
+			var src_val = ($(this).val()).trim();
+	
 			$.ajax({
 				type: "POST",
-				data: 'assistant_req=req_book_search&book_query=' + $(this).val(),
+				data: 'assistant_req=req_book_search&query=' + $(this).val(),
 				url: "ajax.php", success: function(result)
 					{
 						$('#dfer45').remove();
-						$("#content_main_db_result").css({"height":"100%", "overflow":"scroll"});
-						$("#content_main_db_result").html(result);							        								
+						$("#content_main_db_result").css({"height":"100%", "overflow-y":"scroll"});
+						$("#content_main_db_result").html(result);
+						$('#content_main_db_result table tr td span:contains("' + src_val + '")').css("background-color", "#ffff73");
 	    			}
 	    		}
     		);				

@@ -24,20 +24,37 @@ switch ($_POST['assistant_req'])
         search_books_2(null, null, -1, "tr_zebra", null, ASSISTANT);
         break;
     }
-    case "req_checkin":
+    case "req_book_checkin":
         {
+            if(isset($_POST['query']))
+            {
+                echo "<h1> it's working</h1>";
+            }
+            else
+            {
+                get_book_tracker("tr_zebra", ASSISTANT);
+            }
             
+            break;
         }
-    case "req_checkout":
+    case "req_book_checkout":
         {
-            
+            if(isset($_POST['query']))
+            {
+                echo "<h1> it's working</h1>";
+            }
+            else
+            {
+                get_book_reservations("tr_zebra", ASSISTANT);                
+            }          
+            break;
         }
     case "req_book_search":
         {
             //print_r($_POST);
-            if(isset($_POST['book_query']))
+            if(isset($_POST['query']))
             {
-                search_books_2($_POST['book_query'], $_POST['book_query'], -2, "tr_zebra", null, ASSISTANT, true);
+                search_books_2($_POST['query'], $_POST['query'], -2, "tr_zebra", null, ASSISTANT, true);
             }
             break;
         }
