@@ -44,14 +44,15 @@ function nav_mark_selected_item(elt)
 {
 	$('#nav_div ul li').css("background-color", "#575757");
 	$(elt).css("background-color", "#d07200");
+	$('#context_filter').remove();		
+	
 	if(elt == '#checkin' || elt == '#checkout')
 	{
-		$('#context-filter').remove();		
 		$("#content_main_db_result").css({"height":"90%", "overflow-y":"scroll"});
 		$("#content_main_content").append
 		(
 			'<div id="context_filter" style="height: 10%; background-color: #575757; text-align: center; ">'
-			+'<input type="text" id="ct_filter_input" placeholder="filter id/email" style="background-color: white; width: 20%; padding: 1%; font-size: 16px; text-align: center; margin-top: 0.5%; border-radius: 2px;">'
+			+'<input type="text" id="ct_filter_input" placeholder="filter email " style="background-color: white; width: 20%; padding: 1%; font-size: 16px; text-align: center; margin-top: 0.5%; border-radius: 2px;">'
 			+'</div>'
 		);
 
@@ -108,7 +109,6 @@ function nav_mark_selected_item(elt)
 	}
 	else
 	{
-		$('#context_filter').remove();		
 		$("#content_main_db_result").css({"height":"100%", "overflow-y":"scroll"});
 	}	
 }
