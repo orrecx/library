@@ -213,12 +213,16 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
                         }
                     case BORROWER:
                         {
-                            printf('<tr class="%s"><td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td><td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td><td>%s</td><td>', 
+                            printf('<tr class="%s">
+                                        <td class="%s"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:50%%; height:50%%;"></td>
+                                        <td><strong>%s</strong><br><em style="font-size=12px;">by %s</em></td>
+                                        <td>%s</td>', 
                                 $tr_style, $td_img_style, $row["book_img"], $row["book_title"], $row["book_author"], $row["book_description"]);
+                            
                             if ($row['book_onloan']) {
                                 printf('<td>%s</td></tr>', $row["book_duedate"]);
                             } else {
-                                printf('<td><input type="checkbox" name="checkbox_%s_%s"></td></tr>', $n, $row['book_id']);
+                                printf('<td style="text-align: center;"><input type="checkbox" name="checkbox_%s_%s" style="transform:scale(1.5, 1.5); cursor: pointer;"></td></tr>', $n, $row['book_id']);
                                 $n ++;
                             }
                             printf("\r\n");
@@ -236,7 +240,11 @@ function search_books_2($title, $author, $nb_res, $td_base_style, $td_img_style,
             }
             
             if ($printf_form && $n > 0)
-                printf('<tr class="%s_0" style="text-align: center; background-color: #171717; color: white;"><td></td><td colspan="2" ><input type="submit" value="Submit book selection" name="user_book_selection" style="background-color:%s_0; font-weight: bold; width: 30%%;" /></td></tr>', $td_base_style, $td_base_style);
+                printf('<tr class="%s_0" style="background-color: #3e1366;">
+                            <td></td>
+                            <td colspan="2" style="text-align: center;"><input type="submit" value="Submit selection" name="user_book_selection" style="background-color:%s_0; font-weight: bold; width: 40%%; padding: 4px; cursor: pointer;" /></td>
+                            <td></td>
+                          </tr>', $td_base_style, $td_base_style);
             
             printf('</table>');
             if ($printf_form)
