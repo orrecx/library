@@ -154,22 +154,22 @@ UPDATE tb_books SET book_onloan = true, book_duedate = '2017-12-19', borrower_id
 
 INSERT INTO tb_book_tracker (book_id, borrower_id, start_date, end_date) VALUES
 (5,  8, '2017-09-30', '2017-12-30'),
-(14, 8, '2017-09-30', '2017-12-30'),
-(16, 8, '2017-09-30', '2018-01-30'),
 (10, 2, '2017-10-05', '2018-01-05'),
-(24, 2, '2017-10-12', '2018-02-12'),
 (33, 2, '2017-09-30', '2017-12-30'),
 (27, 6, '2017-06-03', '2017-09-03'),
+(16, 8, '2017-09-30', '2018-01-30'),
 (30, 6, '2017-09-20', '2017-12-20'),
+(24, 2, '2017-10-12', '2018-02-12'),
 (21, 1, '2017-09-15', '2017-12-15'),
+(14, 8, '2017-09-30', '2017-12-30'),
 (2,  5, '2017-09-19', '2017-12-19');
 
 INSERT INTO tb_book_tracker_archives (book_id, borrower_id, start_date, end_date) VALUES
-(24, 2, '2017-07-13', '2018-08-12'),
 (33, 2, '2017-07-09', '2017-10-30'),
 (27, 6, '2017-08-05', '2017-10-03'),
-(30, 6, '2017-08-12', '2017-11-26'),
+(24, 2, '2017-07-13', '2018-08-12'),
 (21, 1, '2017-09-15', '2017-11-10'),
+(30, 6, '2017-08-12', '2017-11-26'),
 (2,  5, '2017-10-29', '2017-12-03');
 
 
@@ -185,10 +185,13 @@ USE library;
 
 #create user accounts
 CREATE USER 'librarian'@'localhost' IDENTIFIED  BY 'librarian_psswd';
-GRANT select, update, insert, delete ON library.* to 'librarian'@'localhost';
+GRANT SELECT, UPDATE, INSERT, DELETE ON library.* to 'librarian'@'localhost';
 
 CREATE USER 'assistant'@'localhost' IDENTIFIED  BY 'assistant_psswd';
 GRANT SELECT ON library.* to 'assistant'@'localhost';
+GRANT UPDATE, DELETE, INSERT ON library.tb_book_tracker to 'assistant'@'localhost';
+GRANT UPDATE, DELETE, INSERT ON library.tb_book_tracker_archives to 'assistant'@'localhost';
+GRANT UPDATE, DELETE, INSERT ON library.tb_reservations to 'assistant'@'localhost';
 GRANT UPDATE (book_onloan, book_duedate, borrower_id) ON library.tb_books to 'assistant'@'localhost';
 
 CREATE USER 'borrower'@'localhost' IDENTIFIED  BY 'borrower_psswd';

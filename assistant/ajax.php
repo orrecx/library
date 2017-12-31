@@ -26,27 +26,44 @@ switch ($_POST['assistant_req'])
     }
     case "req_book_checkin":
         {
-            if(isset($_POST['query']))
+            if(isset($_POST['query']) && $_POST['query'] == 'set' && isset($_POST['vals']))
             {
-                echo "<h1> it's working</h1>";
+                //$_POST['vals'] = q-checkbox_1-checkbox_23-checkbox_15
+                $vals = explode('-', $_POST['vals']);
+                for($i = 1 ; $i < count($vals); $i++)
+                {
+                    $v = explode("_", $vals[$i]); //checkbox_nr
+                    checkin_book($v[1], ASSISTANT);
+                }
             }
-            else
+            else 
             {
-                get_book_tracker("tr_zebra", ASSISTANT);
+                get_book_tracker("tr_zebra", (isset($_POST['query']) ? $_POST['query'] : null), ASSISTANT);
             }
             
             break;
         }
     case "req_book_checkout":
         {
-            if(isset($_POST['query']))
+            if(isset($_POST['query']) && $_POST['query'] == 'set' && isset($_POST['vals']))
             {
-                echo "<h1> it's working</h1>";
+                //$_POST['vals'] = q-checkbox_1-checkbox_23-checkbox_15
+                $vals = explode('-', $_POST['vals']);
+                for($i = 1 ; $i < count($vals); $i++)
+                {
+                    $v = explode("_", $vals[$i]); //checkbox_nr
+                    checkout_book($v[1], ASSISTANT);
+                }                
+                
             }
             else
             {
-                get_book_reservations("tr_zebra", ASSISTANT);                
-            }          
+                get_book_reservations("tr_zebra", (isset($_POST['query']) ? $_POST['query'] : null), ASSISTANT);
+            }
+            
+            break;
+            
+            
             break;
         }
     case "req_book_search":

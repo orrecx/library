@@ -46,37 +46,65 @@ function nav_mark_selected_item(elt)
 	$(elt).css("background-color", "#d07200");
 	if(elt == '#checkin' || elt == '#checkout')
 	{
+		$('#context-filter').remove();		
 		$("#content_main_db_result").css({"height":"90%", "overflow-y":"scroll"});
 		$("#content_main_content").append
 		(
 			'<div id="context_filter" style="height: 10%; background-color: #575757; text-align: center; ">'
-			+'<input type="text" id="ct_filter_input" placeholder="filter id/email" style="background-color: white; width: 20%; padding: 1%; font-size: 16px; text-align: center; margin-top: 0.5%;">'
+			+'<input type="text" id="ct_filter_input" placeholder="filter id/email" style="background-color: white; width: 20%; padding: 1%; font-size: 16px; text-align: center; margin-top: 0.5%; border-radius: 2px;">'
 			+'</div>'
 		);
 
 		$('#ct_filter_input').keydown(function(event)
+			{
+				//if not ENTER
+				if(event.keyCode != 13 || ($(this).val()).trim() == '' || $(this).attr("type") == 'submit')
 				{
-					//if not ENTER
-					if(event.keyCode != 13 || ($(this).val()).trim() == '')
-					{
-						return;
-					}
+					return;
+				}
 
-					var src_val = ($(this).val()).trim();
-					var dt = 'assistant_req=' + ((elt == '#checkin') ? 'req_book_checkin': 'req_book_checkout') + '&query=' + $(this).val() 
-					$.ajax({
-						type: "POST",
-						data: dt,
-						url: "ajax.php", success: function(result)
-							{
-								$("#content_main_db_result").css({"height":"100%", "overflow-y":"scroll"});
-								$("#content_main_db_result").html(result);
-			    			}
-			    		}
-		    		);				
-				}			
-			);
-				
+				var src_val = ($(this).val()).trim();
+				var me = $(this);
+				var dt = 'assistant_req=' + ((elt == '#checkin') ? 'req_book_checkin': 'req_book_checkout') + '&query=' + $(this).val() 
+				$.ajax({
+					type: "POST",
+					data: dt,
+					url: "ajax.php", success: function(result)
+						{
+							$("#content_main_db_result").html(result);
+							$(me).attr("type", "submit");
+							$(me).val("Submit");
+							$(me).css({"background-color" : "#d07200", "color": 'white'});
+							$(me).click(function(){
+								//submit user data
+								var selections = $('#content_main_db_result input[type="checkbox"]:checked');
+								var query = 'assistant_req=' + ((elt == '#checkin') ? 'req_book_checkin': 'req_book_checkout') + '&query=set&vals=q';
+								var i = 0;
+																
+								for(; i < selections.length; i++)
+								{
+									query += '-'  + $(selections[i]).attr("name");
+								}
+								
+								if(i > 0)
+								{
+									$.ajax({
+									type: "POST",
+									data: query,
+									url: "ajax.php",
+									success: function(res)
+									{
+										$("#content_main_db_result").css({"height":"100%", "overflow-y":"scroll"});
+										$("#content_main_db_result").html(res);																					
+									}										
+									});
+								}
+							});
+		    			}
+		    		}
+		   		);				
+			}			
+		);				
 	}
 	else
 	{

@@ -477,7 +477,7 @@ function get_overdue_books($td_base_style, $nb_res, $db_user)
 }
 
 
-function get_book_reservations($tr_base_style, $db_user)
+function get_book_reservations($tr_base_style, $usr_email, $db_user)
 {
     $db_conn = db_getConnection($db_user);
     
@@ -486,6 +486,13 @@ function get_book_reservations($tr_base_style, $db_user)
                 tb_books.book_img, tb_books.book_onloan, tb_books.book_duedate, tb_borrowers.borrower_id, tb_borrowers.borrower_email
                 FROM tb_reservations, tb_books, tb_borrowers WHERE tb_borrowers.borrower_id = tb_reservations.borrower_id  
                 AND tb_books.book_id = tb_reservations.book_id';
+        
+        $form = false;
+        if(isset($usr_email))
+        { 
+            $qr .= ' AND tb_borrowers.borrower_email = "' . $usr_email . '"';
+            $form = true;
+        }
         
         $rows = $db_conn->query($qr);
         if($rows->rowCount() > 0)
@@ -502,6 +509,13 @@ function get_book_reservations($tr_base_style, $db_user)
                 {
                     $tr_style = $tr_style . ' style="background-color: #ffa2a2;" ';
                     $tr_trail = '<td>'. $row['book_duedate'] . '</td>';
+                }
+                else 
+                {
+                    if($form)
+                    {
+                        $tr_trail = '<td style="text-align: center;"><input type="checkbox" name="checkbox_'. $row["reservation_id"] .'" style="transform:scale(1.5, 1.5); cursor: pointer;"><td>';
+                    }                    
                 }
                 
                 printf('<tr %s>
@@ -526,7 +540,7 @@ function get_book_reservations($tr_base_style, $db_user)
 }
 
 
-function get_book_tracker($tr_base_style, $db_user)
+function get_book_tracker($tr_base_style, $usr_email, $db_user)
 {
     $db_conn = db_getConnection($db_user);
     
@@ -536,6 +550,14 @@ function get_book_tracker($tr_base_style, $db_user)
                 FROM tb_book_tracker, tb_books, tb_borrowers WHERE tb_borrowers.borrower_id = tb_book_tracker.borrower_id
                 AND tb_books.book_id = tb_book_tracker.book_id';
         
+        $form = false;
+        
+        if(isset($usr_email)) 
+        {
+            $qr .= ' AND tb_borrowers.borrower_email = "' . $usr_email . '"';
+            $form = true;
+        }
+        
         $rows = $db_conn->query($qr);
         if($rows->rowCount() > 0)
         {
@@ -544,6 +566,7 @@ function get_book_tracker($tr_base_style, $db_user)
             $i = 1;
             while($row = $rows->fetch(PDO::FETCH_ASSOC))
             {
+                $td_check_box = '';
                 $tr_style = 'class="'.$tr_base_style . "_" . ($i % 2) . '"';
                 $datetime = new DateTime($row['end_date']);
                 if(time() > $datetime->getTimestamp())
@@ -551,13 +574,19 @@ function get_book_tracker($tr_base_style, $db_user)
                     $tr_style = $tr_style . ' style="background-color: #ffa2a2; border: 1px solid white;" ';
                 }
                 
+                if($form)
+                {
+                   $td_check_box = '<td style="width: 5%; text-align: center;"><input type="checkbox" name="checkbox_'. $row["tracker_id"] .'" style="transform:scale(1.5, 1.5); cursor: pointer;"><td>'; 
+                }
+                
                 printf('<tr %s>
                             <td style="text-align: center; width:10%%;">[%s]</td>
                             <td style="width: 30%%; text-align: center;">%s<br>- %s -</td>
                             <td style="text-align: center; width:10%%;"><img src="%s" alt="default_img" style="display: block; margin-left: auto; margin-right: auto; width:60%%; height:10%%;"></td>
                             <td style="width: 40%%;"><span style="font-weight: bold;">%s</span><br><span style="font-style: italic; font-size: 14px;">by &nbsp;</span><span style="font-style: italic; font-size: 14px;">%s</span></td>
-                            <td>%s</td></tr>',
-                    $tr_style, $row['tracker_id'], $row["borrower_email"], $row["borrower_id"], $row["book_img"], $row["book_title"], $row["book_author"], $row['end_date']) ;
+                            <td>%s</td>
+                            %s</tr>',
+                    $tr_style, $row['tracker_id'], $row["borrower_email"], $row["borrower_id"], $row["book_img"], $row["book_title"], $row["book_author"], $row['end_date'], $td_check_box) ;
                 $i++;
             }
             
@@ -566,6 +595,71 @@ function get_book_tracker($tr_base_style, $db_user)
         
     }
     catch (PDOException $ex)
+    {
+        error_message($ex->getMessage());
+        exit;
+    }
+}
+
+function checkin_book($tracker_id, $db_user)
+{
+    $db_conn = db_getConnection($db_user);
+    
+    try 
+    {
+        $rows = $db_conn->query('SELECT * FROM tb_book_tracker WHERE tracker_id = ' . $tracker_id);
+        if($rows->rowCount() != 1)
+        {
+            //print warning
+        }
+        else 
+        {
+            $row = $rows->fetch(PDO::FETCH_ASSOC);
+            $qr = 'INSERT INTO tb_book_tracker_archives (book_id, borrower_id, start_date, end_date) SELECT tb_book_tracker.book_id, tb_book_tracker.borrower_id, tb_book_tracker.start_date, tb_book_tracker.end_date FROM tb_book_tracker WHERE tb_book_tracker.tracker_id = ' .$tracker_id;
+            $db_conn->query($qr);
+            $db_conn->query('UPDATE tb_book_tracker_archives SET end_date = "' . date("Y-m-d") . '"');
+            $db_conn->query('UPDATE tb_books SET book_onloan = false, book_duedate = null, borrower_id = null WHERE book_id = ' .$row['book_id']);
+            $db_conn->query('DELETE FROM tb_book_tracker WHERE tracker_id = ' . $tracker_id);            
+        }
+    }
+    catch(PDOException $ex)
+    {
+        error_message($ex->getMessage());
+        exit;
+    }    
+}
+
+function checkout_book($resv_id, $db_user)
+{
+    $db_conn = db_getConnection($db_user);
+    
+    try
+    {
+        $rows = $db_conn->query('SELECT tb_reservations.*, tb_books.book_id, tb_books.book_onloan FROM tb_reservations, tb_books WHERE tb_reservations.book_id = tb_books.book_id AND reservation_id = ' . $resv_id);
+        if($rows->rowCount() != 1)
+        {
+            //print warning
+        }
+        else
+        {
+            $row = $rows->fetch(PDO::FETCH_ASSOC);
+            
+            if($row['book_onloan'])
+            {
+                //book not available for loan. printf warning
+            }
+            else 
+            {              
+                $start_date = date("Y-m-d"); //now
+                $end_date = date("Y-m-d", time() + 3*30*24*60*60); //three months from now
+                $qr = 'INSERT INTO tb_book_tracker (book_id, borrower_id, start_date, end_date) VALUES (' .$row['book_id'] . ', ' . $row['borrower_id'] . ', "'. $start_date. '", "' .$end_date.'");';
+                $db_conn->query($qr);
+                $db_conn->query('UPDATE tb_books SET book_onloan = true, book_duedate = "'. $end_date . '", borrower_id = '.$row['borrower_id'].' WHERE book_id = ' .$row['book_id']);
+                $db_conn->query('DELETE FROM tb_reservations WHERE reservation_id = ' . $resv_id);            
+            }            
+        }
+    }
+    catch(PDOException $ex)
     {
         error_message($ex->getMessage());
         exit;
