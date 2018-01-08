@@ -18,7 +18,7 @@ CREATE TABLE tb_borrowers (
     borrower_email varchar(512) not null,
     borrower_password varchar(2048) not null,
     borrower_pic varchar(1024) not null default '../pics/avatar_guy.png',
-    borrower_role int unsigned not null default 0,
+    borrower_role int unsigned not null default 1,
     borrower_validation boolean not null default false
 )engine = innodb default charset=utf8;
 
@@ -190,7 +190,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON library.* to 'librarian'@'localhost';
 CREATE USER 'assistant'@'localhost' IDENTIFIED  BY 'assistant_psswd';
 GRANT SELECT ON library.* to 'assistant'@'localhost';
 GRANT UPDATE, DELETE, INSERT ON library.tb_book_tracker to 'assistant'@'localhost';
-GRANT UPDATE, DELETE, INSERT ON library.tb_book_tracker_archives to 'assistant'@'localhost';
+GRANT UPDATE, INSERT ON library.tb_book_tracker_archives to 'assistant'@'localhost';
 GRANT UPDATE, DELETE, INSERT ON library.tb_reservations to 'assistant'@'localhost';
 GRANT UPDATE (book_onloan, book_duedate, borrower_id) ON library.tb_books to 'assistant'@'localhost';
 

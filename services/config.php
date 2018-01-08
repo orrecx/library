@@ -17,6 +17,8 @@
     define('PUBL_PSSD', 'publ_psswd');
     define('PUBL_ROLE', 0);
     
+    define('DONT_CARE_ROLE', -1);
+    
     //constant
     define('SUCCEEDED', 2);
     define('FATAL', 1);
