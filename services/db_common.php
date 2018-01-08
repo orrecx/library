@@ -674,4 +674,34 @@ function checkout_book($resv_id, $db_user)
     }
 }
 
+
+function get_users($validation, $role, $db_user)
+{
+    $db_conn = db_getConnection($db_user);
+    
+    try 
+    {
+        $qr = 'SELECT borrower_id, borrower_name, borrower_address, borrower_email, borrower_pic FROM tb_borrowers WHERE borrower_validation = ' . ($validation ? "true" : "false" ) . ' AND borrower_role=' .$role;
+        $sth = $db_conn->prepare($qr);
+        $sth->execute();        
+        
+        $rows_array = $sth->fetchAll();
+        
+        if(!$rows_array || count($rows_array) == 0)
+        {
+            echo '{"data": "Empty"}';
+            exit;
+        }
+        
+        $json_data = json_encode($rows_array);
+        echo '{"data":'. $json_data . '}';
+        
+    } 
+    catch (PDOException $e) 
+    {
+        error_message($e->getMessage());
+        exit;
+    }
+}
+
 ?>
