@@ -15,13 +15,16 @@ CREATE TABLE tb_borrowers (
     borrower_id int unsigned not null primary key auto_increment,
     borrower_name varchar(128) not null,
     borrower_address varchar(512) not null,
-    borrower_email varchar(512) not null,
+    borrower_email varchar(192) not null,
     borrower_password varchar(2048) not null,
     borrower_pic varchar(1024) not null default '../pics/avatar_guy.png',
     borrower_role int unsigned not null default 1,
-    borrower_validation boolean not null default false
+    borrower_validation boolean not null default false,
+    borrower_registration_date timestamp not null default CURRENT_TIMESTAMP,
+    borrower_lastmodified timestamp NULL ON UPDATE CURRENT_TIMESTAMP
 )engine = innodb default charset=utf8;
 
+/*ALTER TABLE tb_borrowers ADD UNIQUE 'unique_email' ('borrower_email');*/
 
 CREATE TABLE tb_books (
     book_id int unsigned not null primary key auto_increment,
@@ -31,12 +34,15 @@ CREATE TABLE tb_books (
     book_img varchar(1024) not null default '../book_imgs/book_red.png',
     book_onloan boolean default false,
     book_duedate date default null,
+    book_insertion_date timestamp not null default CURRENT_TIMESTAMP,
+    book_lastmodified timestamp NULL ON UPDATE CURRENT_TIMESTAMP,    
     borrower_id int unsigned default null, 
     FOREIGN KEY (borrower_id) REFERENCES tb_borrowers (borrower_id)
 )engine = innodb default charset=utf8;
 
 CREATE TABLE tb_reservations (
 	reservation_id int unsigned not null primary key auto_increment,
+    reservation_date timestamp not null default CURRENT_TIMESTAMP,    
 	book_id int unsigned not null,
 	borrower_id int unsigned not null,
 	FOREIGN KEY (book_id) REFERENCES tb_books (book_id),
@@ -204,3 +210,55 @@ FLUSH PRIVILEGES;
 
 #revoke delete, update on library.* from 'librarian'@'host'; #for host '%' means any host
 #GRANT ALL PRIVILEGES ON *.* to 'newuser'@'localhost';
+
+
+#result
+SELECT CONCAT("Current number of borrowers: ", COUNT(borrower_id)) as info from tb_borrowers;
+SELECT CONCAT("Current number of books: ", COUNT(book_id)) as info from tb_books;
+SELECT CONCAT("Current number of books onloan: ", SUM(book_onloan)) as info from tb_books;
+SELECT CONCAT("Current number of books in the library: ", COUNT(book_id) - SUM(book_onloan)) as info from tb_books;
+SELECT CONCAT("Current number of book reservation: ", COUNT(reservation_id)) as info from tb_reservations;
+
+
+#retrieve the first 20 books
+#SELECT * from tb_books limit 20;
+#retrieve the next 20 books ==> limit offset, nm_row
+#SELECT * from tb_books limit 20, 20;
+#you can also see the SELECT statment as an execute statement ==> **** WHERE book_id > (select count(book_id) - 3 from tb_books)
+#retrieve the last 10 books
+#SELECT book_id, book_title, book_author from tb_books WHERE book_id > (SELECT COUNT(book_id) - 11 from tb_books) limit 10;
+
+
+### ----------------------------------------- BACKUP ---------------------------------------------------
+#backup:::: mysqldump option > output_location.sql
+#mysqldump -h host -u username -pPASSWORD database_name output_location
+#mysqldump -h localhost -u librarian -plibrarian_psswd library > c:\xampp\htdocs\library\mybackup.sql
+#backup all databases
+#mysqldum -h host -u username -p --all-databases >  output_location.sql
+#backup multiple databases
+#mysqldum -h host -u username -p --databases db_1 db_2 >  output_location.sql
+#backing up single table
+#mysqldum -h host -u username -p --databases db_name --tables tb_name >  output_location.sql
+#restore:::: mysql.exe options < bk.sql
+
+#use also binary_log
+#first dump the binary_log into a f.sql file then perform the recovery
+#mysqlbinlog.exe mysql-bin.000001 > bck.sql  or 
+# to dump data until a certain period of time
+#mysqlbinlog.exe --stop-datetime="2018-01-12 10:23:30" mysql-bin.000001 > bck.sql
+#then use mysql.exe option < bck.sql;
+
+# to find out the location of the binary file
+# mysql.exe -u root -p
+# show variables like '%log%';
+
+#Joinning tables
+#INNER JOIN, LEFT OUTER JOIN, RIGHT OUTER JOIN, FULL OUTER JOIN (not supported by mysql, used UNION to bring together the result of LEFT and RIGHT OUTER JOIN)
+#CROSS JOIN (cartesian product)
+# LEFT OUTER JOIN  is also simplify in  LEFT JOIN
+# INNER JOIN returns only rows where the condition is met.
+# OUTER JOIN returns rows where the condition is met and those rows which does not have any match on the second table
+# Full outer JOIN SYNTAX
+#SELECT t1.c1, t1.c2, t2.c6, t2.c1 FROM t1 LEFT OUTER JOIN t2 ON t1.c1 = t2.c2
+#UNION
+#SELECT t1.c1, t1.c2, t2.c6, t2.c1 FROM t2 RIGHT OUTER JOIN t1 ON t1.c1 = t2.c2
